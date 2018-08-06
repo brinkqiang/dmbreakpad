@@ -66,7 +66,7 @@ before_script:
         #autoconf
         #automake --add-missing
         #sh configure
-        echo linux 
+        echo linux
     fi
 
 script:
