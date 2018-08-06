@@ -59,11 +59,11 @@ IF(UNIX)
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cc)
 
-    ADD_LIBRARY(breakpad ${SOURCES})
+    ADD_LIBRARY(dmbreakpad ${SOURCES})
 
-    ADD_EXECUTABLE(breakpadtest test/main.cc)
+    ADD_EXECUTABLE(dmbreakpadtest ${CMAKE_CURRENT_SOURCE_DIR}/test/main.cc)
 
-    TARGET_LINK_LIBRARIES(breakpadtest breakpad)
+    TARGET_LINK_LIBRARIES(dmbreakpadtest dmbreakpad)
     
 	ADD_EXECUTABLE(minidump-2-core google_breakpad/tools/linux/md2core/minidump-2-core.cc)
 
@@ -106,9 +106,9 @@ ELSEIF(WIN32)
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cc)
 
-    ADD_LIBRARY(breakpad ${SOURCES})
+    ADD_LIBRARY(dmbreakpad ${SOURCES})
 
-    ADD_EXECUTABLE(breakpadtest test/main.cc)
+    ADD_EXECUTABLE(dmbreakpadtest ${CMAKE_CURRENT_SOURCE_DIR}/test/main.cc)
 
-    TARGET_LINK_LIBRARIES(breakpadtest breakpad)
+    TARGET_LINK_LIBRARIES(dmbreakpadtest dmbreakpad)
 ENDIF(UNIX)

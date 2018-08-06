@@ -1,6 +1,6 @@
 
-#ifndef __GBREAKPAD_H__
-#define __GBREAKPAD_H__
+#ifndef __DMBREAKPAD_H__
+#define __DMBREAKPAD_H__
 
 #include <cstdio>
 #ifdef WIN32
@@ -95,4 +95,4 @@ private:
 //    return 0;   
 //} 
 
-#endif // __GBREAKPAD_H__
+#endif // __DMBREAKPAD_H__
