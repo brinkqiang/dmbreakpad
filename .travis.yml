@@ -43,7 +43,7 @@ before_install:
     if [ "$TRAVIS_OS_NAME" == "osx" ] ; then
         #brew update
         #brew install libtool
-        echo osx     
+        echo osx
     fi
     if [ "$TRAVIS_OS_NAME" == "linux" ] ; then
         echo linux
@@ -57,6 +57,7 @@ before_script:
         #autoconf
         #automake --add-missing
         #sh configure
+        echo osx
     fi
     if [ "$TRAVIS_OS_NAME" == "linux" ] ; then
         #libtoolize
@@ -65,6 +66,7 @@ before_script:
         #autoconf
         #automake --add-missing
         #sh configure
+        echo linux 
     fi
 
 script:
