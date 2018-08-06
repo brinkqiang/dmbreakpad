@@ -6,47 +6,109 @@ IF (WIN32)
     MESSAGE(STATUS "Now is windows")
 
     SET(DMOS_NAME "win")
-
     SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" )    
 ELSEIF (APPLE)  
     MESSAGE(STATUS "Now is Apple systems")  
 
     SET(DMOS_NAME "mac") 
-
-    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread" )
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread" )    
 ELSEIF (UNIX)  
     MESSAGE(STATUS "Now is UNIX-like OS")  
  
-    SET(DMOS_NAME "lin") 
-    
+    SET(DMOS_NAME "lin")
     SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -pthread" )    
 ENDIF ()
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/depends)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/test)
+IF(UNIX)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/linux)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/linux)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/common)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/processor)	
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/third_party)
 
-LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/${DMOS_NAME})
+    LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+    
+    SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+    SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/${DMOS_NAME})
 
-SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/${DMOS_NAME})
+    FILE(GLOB_RECURSE SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/minidump_file_writer.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/string_conversion.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/convert_UTF.cc
+    
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cc 
 
-FILE(GLOB_RECURSE dmbreakpad_DEPENDS_SOURCES
-${CMAKE_CURRENT_SOURCE_DIR}/depends/*.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/depends/*.cc
-${CMAKE_CURRENT_SOURCE_DIR}/depends/*.c
-${CMAKE_CURRENT_SOURCE_DIR}/depends/*.hpp
-${CMAKE_CURRENT_SOURCE_DIR}/depends/*.h)
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/linux/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/linux/*.cc 
 
-ADD_LIBRARY(dmbreakpad_DEPENDS ${dmbreakpad_DEPENDS_SOURCES})
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src/*.cc 
 
-FILE(GLOB_RECURSE dmbreakpad_SOURCES
-${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
-${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc
-${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
-${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp
-${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/linux/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/linux/*.cc 
 
-ADD_EXECUTABLE(dmbreakpad ${dmbreakpad_SOURCES})
-TARGET_LINK_LIBRARIES(dmbreakpad dmbreakpad_DEPENDS)
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cc)
+
+    ADD_LIBRARY(breakpad ${SOURCES})
+
+    ADD_EXECUTABLE(breakpadtest test/main.cc)
+
+    TARGET_LINK_LIBRARIES(breakpadtest breakpad)
+    
+	ADD_EXECUTABLE(minidump-2-core google_breakpad/tools/linux/md2core/minidump-2-core.cc)
+
+    TARGET_LINK_LIBRARIES(minidump-2-core)
+ELSEIF(WIN32)
+    ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
+    ADD_DEFINITIONS(-D_WIN32_WINNT=0x0501)
+	
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/windows)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/windows)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/common)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/processor)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/third_party)
+
+    LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+    
+    SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+    SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/${DMOS_NAME})
+
+    FILE(GLOB_RECURSE SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cc 
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/windows/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/windows/*.cc 
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src/*.cc 
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/windows/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/windows/*.cc 
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cc)
+
+    ADD_LIBRARY(breakpad ${SOURCES})
+
+    ADD_EXECUTABLE(breakpadtest test/main.cc)
+
+    TARGET_LINK_LIBRARIES(breakpadtest breakpad)
+ENDIF(UNIX)
