@@ -22,7 +22,7 @@ static void CrashFunction()
 
 int main(int argc, char **argv) 
 {   
-    CGBreakPad oBreakPad;
+    CDMBreakPad oBreakPad;
     
     CrashFunction();
 

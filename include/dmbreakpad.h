@@ -9,10 +9,10 @@
 #include "../google_breakpad/client/linux/handler/exception_handler.h"
 #endif
 
-class CGBreakPad
+class CDMBreakPad
 {
 public:
-    CGBreakPad()
+    CDMBreakPad()
         :
 #ifndef WIN32
         eh(   
@@ -27,7 +27,7 @@ public:
 
 
     }
-    ~CGBreakPad()
+    ~CDMBreakPad()
     {
 
     }
