@@ -73,6 +73,7 @@ private:
     google_breakpad::ExceptionHandler eh;
 };
 
+#define DMBREAKPAD_INIT()               CDMBreakPad oInitBreakpad
 //static void CrashFunction()
 //{   
 //    int *i = reinterpret_cast<int*>(0x45);   
