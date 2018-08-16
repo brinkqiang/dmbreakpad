@@ -1,5 +1,5 @@
 rmdir /S /Q build
 mkdir build
-pushd build
-cmake -DCMAKE_BUILD_TYPE=relwithdebinfo ..
-popd
+cd build
+cmake -A x64 -DCMAKE_BUILD_TYPE=relwithdebinfo ..
+cd ..

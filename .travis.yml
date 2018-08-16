@@ -52,6 +52,7 @@ before_install:
 before_script:
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ] ; then
+        #glibtoolize
         #aclocal
         #autoheader
         #autoconf
