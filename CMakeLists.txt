@@ -84,7 +84,7 @@ IF (UNIX)
     TARGET minidump-2-core
     PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/mysql/lib/libmysql.dll
+    ${CMAKE_CURRENT_SOURCE_DIR}/script/debug.sh
     $<TARGET_FILE_DIR:minidump-2-core>
     )
 ENDIF ()
