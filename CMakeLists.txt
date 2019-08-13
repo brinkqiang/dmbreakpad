@@ -79,7 +79,6 @@ IF (UNIX)
 
     TARGET_LINK_LIBRARIES(minidump-2-core)
 
-    IF (WIN32)
     ADD_CUSTOM_COMMAND(
     TARGET minidump-2-core
     PRE_BUILD
@@ -87,5 +86,4 @@ IF (UNIX)
     ${CMAKE_CURRENT_SOURCE_DIR}/script/debug.sh
     $<TARGET_FILE_DIR:minidump-2-core>
     )
-ENDIF ()
 ENDIF(UNIX)
