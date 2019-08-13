@@ -78,4 +78,14 @@ IF (UNIX)
     ADD_EXECUTABLE(minidump-2-core google_breakpad/tools/linux/md2core/minidump-2-core.cc)
 
     TARGET_LINK_LIBRARIES(minidump-2-core)
+
+    IF (WIN32)
+    ADD_CUSTOM_COMMAND(
+    TARGET minidump-2-core
+    PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/mysql/lib/libmysql.dll
+    $<TARGET_FILE_DIR:minidump-2-core>
+    )
+ENDIF ()
 ENDIF(UNIX)
