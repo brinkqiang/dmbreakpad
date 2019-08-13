@@ -1,4 +1,4 @@
 #!/bin/sh
 
-./minidump-2-core $1 > dmbreakpadtest.core
-gdb dmbreakpadtest dmbreakpadtest.core
+./minidump-2-core $1 > $1.core
+gdb dmbreakpadtest $1.core
