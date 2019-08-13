@@ -64,6 +64,10 @@ ELSE (WIN32)
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/linux/*.cc)
 ENDIF()
 
+IF(WIN32)
+    ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
+ENDIF(WIN32)
+
 ADD_LIBRARY(dmbreakpad ${DMBREAKPAD_SOURCES})
 
 ADD_EXECUTABLE(dmbreakpadtest ${CMAKE_CURRENT_SOURCE_DIR}/test/main.cc)
