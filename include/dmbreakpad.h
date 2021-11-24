@@ -5,10 +5,11 @@
 #include <cstdio>
 #include <string>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "../src/client/windows/handler/exception_handler.h"
 #else
 #include "../src/client/linux/handler/exception_handler.h"
+#include "third_party/lss/linux_syscall_support.h"
 #endif
 
 
