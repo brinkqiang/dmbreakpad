@@ -11,6 +11,12 @@
 #include "../src/client/linux/handler/exception_handler.h"
 #endif
 
+static bool dumpCallback(const google_breakpad::MinidumpDescriptor& desc, void* context, bool succeeded)
+{
+    printf("Dump path: %s\n", desc.path());
+    return succeeded;
+}
+
 class CDMBreakPad
 {
 public:
@@ -25,11 +31,7 @@ public:
 
     }
 
-    static bool dumpCallback(const google_breakpad::MinidumpDescriptor& desc, void* context, bool succeeded)
-    {
-        printf("Dump path: %s\n", desc.path());
-        return succeeded;
-    }
+
 private:
     google_breakpad::ExceptionHandler eh;
     google_breakpad::MinidumpDescriptor descriptor;
