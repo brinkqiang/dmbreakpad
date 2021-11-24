@@ -288,12 +288,12 @@ namespace google_breakpad {
         // Relation for maps whose keys are strings shared with some other
         // structure.
         struct CompareStringPtrs {
-            bool operator()(const string* x, const string* y) { return *x < *y; }
+            bool operator()(const string* x, const string* y) const { return *x < *y; }
         };
 
         // A map from filenames to File structures.  The map's keys are
         // pointers to the Files' names.
-        typedef map<string*, File*, CompareStringPtrs> FileByNameMap;
+        typedef map<const string*, File*, CompareStringPtrs> FileByNameMap;
 
         // A set containing Function structures, sorted by address.
         typedef set<Function*, FunctionCompare> FunctionSet;
