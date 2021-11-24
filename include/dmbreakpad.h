@@ -23,9 +23,9 @@ public:
 
     }
 
-    static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* context, bool succeeded)
+    static bool dumpCallback(const google_breakpad::MinidumpDescriptor& desc, void* context, bool succeeded)
     {
-        printf("Dump path: %s\n", descriptor.path());
+        printf("Dump path: %s\n", desc.path());
         return succeeded;
     }
 private:
