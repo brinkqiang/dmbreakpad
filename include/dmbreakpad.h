@@ -60,6 +60,8 @@ public:
     static bool dumpCallback(const google_breakpad::MinidumpDescriptor& desc, void* context, bool succeeded)
     {
         printf("Dump path: %s\n", desc.path());
+        fflush(stdout);
+
         return succeeded;
     }
 #endif
