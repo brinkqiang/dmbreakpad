@@ -75,6 +75,7 @@ ELSEIF(UNIX)
     )
 
     LIST(FILTER DMBREAKPAD_SOURCES EXCLUDE REGEX "test.cc$")
+    LIST(FILTER DMBREAKPAD_SOURCES EXCLUDE REGEX "minidump_writer_unittest_utils.cc$")
 ENDIF()
 
 IF(WIN32)
