@@ -16,7 +16,7 @@ class CDMBreakPad
 public:
     CDMBreakPad()
         :
-        descriptor("."), eh(descriptor, NULL, dumpCallback, NULL,  true, -1)
+        eh(descriptor, NULL, dumpCallback, NULL,  true, -1), descriptor(".")
     {
 
     }
