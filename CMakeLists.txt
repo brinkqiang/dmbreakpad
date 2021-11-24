@@ -84,7 +84,7 @@ ELSEIF(UNIX)
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/convert_UTF.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/md5.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/string_conversion.cc
-
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/common/path_helper.cc
     )
 ENDIF()
 
