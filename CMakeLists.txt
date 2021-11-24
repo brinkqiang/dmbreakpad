@@ -34,6 +34,7 @@ FILE(GLOB_RECURSE SOURCES
 
 IF (WIN32)
     FILE(GLOB_RECURSE DMBREAKPAD_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cc 
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src/*.cpp
@@ -52,6 +53,7 @@ IF (WIN32)
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/windows/*.cc)
 ELSE (WIN32)
     FILE(GLOB_RECURSE DMBREAKPAD_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cc 
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src/*.cpp
