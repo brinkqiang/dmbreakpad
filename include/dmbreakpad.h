@@ -66,6 +66,8 @@ public:
     }
 #endif
 private:
+
+    // descriptor must be defined before eh
 #ifdef __linux__
     google_breakpad::MinidumpDescriptor descriptor;
 #endif
