@@ -3,6 +3,8 @@
 #define __DMBREAKPAD_H__
 
 #include <cstdio>
+#include <string>
+
 #ifdef WIN32
 #include "../src/client/windows/handler/exception_handler.h"
 #else
@@ -14,7 +16,7 @@ class CDMBreakPad
 public:
     CDMBreakPad()
         :
-        eh(descriptor("."), NULL, dumpCallback, NULL,  true, -1)
+        eh(descriptor(std::string(".")), NULL, dumpCallback, NULL,  true, -1)
     {
 
     }
