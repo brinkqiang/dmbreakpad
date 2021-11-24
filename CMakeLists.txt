@@ -89,6 +89,8 @@ ELSEIF(UNIX)
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/string_conversion.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/common/path_helper.cc
     )
+
+    LIST(FILTER DMBREAKPAD_SOURCES EXCLUDE REGEX "*test$")
 ENDIF()
 
 IF(WIN32)
