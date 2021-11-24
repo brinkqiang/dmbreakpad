@@ -4,9 +4,9 @@
 
 #include <cstdio>
 #ifdef WIN32
-#include "../google_breakpad/client/windows/handler/exception_handler.h"
+#include "../src/client/windows/handler/exception_handler.h"
 #else
-#include "../google_breakpad/client/linux/handler/exception_handler.h"
+#include "../src/client/linux/handler/exception_handler.h"
 #endif
 
 class CDMBreakPad
@@ -14,17 +14,8 @@ class CDMBreakPad
 public:
     CDMBreakPad()
         :
-#ifndef WIN32
-        eh(   
-        ".", NULL, callback, NULL,   
-        true)
-#else
-        eh(   
-        L".", NULL, callback, NULL,   
-        true)
-#endif
+        eh(descriptor, NULL, dumpCallback, NULL,  true, -1)
     {
-
 
     }
     ~CDMBreakPad()
@@ -32,45 +23,14 @@ public:
 
     }
 
-#ifndef WIN32
-    static bool callback(const char *dump_path,
-        const char *id,
-        void *context,
-        bool succeeded)
+    static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, void* context, bool succeeded)
     {
-        if (succeeded)
-        {   
-            printf("dump path is %s, guid is %s\n", dump_path, id);   
-        }
-        else
-        {   
-            printf("dump failed\n");   
-        }   
-        fflush(stdout);   
-
-        return succeeded;   
+        printf("Dump path: %s\n", descriptor.path());
+        return succeeded;
     }
-#else
-    static bool callback(const wchar_t *dump_path, const wchar_t *id,   
-        void *context, EXCEPTION_POINTERS *exinfo,   
-        MDRawAssertionInfo *assertion,   
-        bool succeeded)
-    {   
-        if (succeeded)
-        {   
-            printf("dump path is %ws, guid is %ws\n", dump_path, id);   
-        }
-        else 
-        {   
-            printf("dump failed\n");   
-        }
-        fflush(stdout);   
-
-        return succeeded;   
-    }   
-#endif
 private:
     google_breakpad::ExceptionHandler eh;
+    google_breakpad::MinidumpDescriptor descriptor(".");
 };
 
 #define DMBREAKPAD_INIT()               CDMBreakPad oInitBreakpad
