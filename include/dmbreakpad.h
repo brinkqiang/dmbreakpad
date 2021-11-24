@@ -11,18 +11,22 @@
 #include "../src/client/linux/handler/exception_handler.h"
 #endif
 
-static bool dumpCallback(const google_breakpad::MinidumpDescriptor& desc, void* context, bool succeeded)
-{
-    printf("Dump path: %s\n", desc.path());
-    return succeeded;
-}
 
 class CDMBreakPad
 {
 public:
     CDMBreakPad()
         :
-        eh(descriptor, NULL, dumpCallback, NULL,  true, -1), descriptor(".")
+#ifdef _WIN32
+        eh(
+            L".", NULL, callback, NULL,
+            true)
+#endif
+
+#if __linux__
+        eh(descriptor, NULL, dumpCallback, NULL, true, -1), descriptor(".")
+#endif
+
     {
 
     }
@@ -31,11 +35,38 @@ public:
 
     }
 
+#ifdef _WIN32
+    static bool callback(const wchar_t* dump_path, const wchar_t* id,
+        void* context, EXCEPTION_POINTERS* exinfo,
+        MDRawAssertionInfo* assertion,
+        bool succeeded)
+    {
+        if (succeeded)
+        {
+            printf("dump path is %ws, guid is %ws\n", dump_path, id);
+        }
+        else
+        {
+            printf("dump failed\n");
+        }
+        fflush(stdout);
 
+        return succeeded;
+    }
+#endif
+
+#if __linux__
+    static bool dumpCallback(const google_breakpad::MinidumpDescriptor& desc, void* context, bool succeeded)
+    {
+        printf("Dump path: %s\n", desc.path());
+        return succeeded;
+    }
+#endif
 private:
     google_breakpad::ExceptionHandler eh;
+#ifdef __linux__
     google_breakpad::MinidumpDescriptor descriptor;
-
+#endif
 };
 
 #define DMBREAKPAD_INIT()               CDMBreakPad oInitBreakpad
