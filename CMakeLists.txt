@@ -9,24 +9,24 @@ ModuleSetCompileOptions()
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src)
-
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src)
-
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/common)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/processor)	
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/third_party)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/google_breakpad)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/google_breakpad/common)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/google_breakpad/processor)	
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/third_party)
 
 IF (WIN32)
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/windows)
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/windows)
-ELSE (WIN32)
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/linux)
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/linux)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/client/windows)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/common/windows)
+ELSEIF (APPLE)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/client/mac)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/common/mac)
+ELSEIF(UNIX)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/client/linux)
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/breakpad/common/linux)
 ENDIF ()
 
 FILE(GLOB_RECURSE SOURCES
@@ -35,41 +35,58 @@ FILE(GLOB_RECURSE SOURCES
 IF (WIN32)
     FILE(GLOB_RECURSE DMBREAKPAD_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cc 
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src/*.cc 
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cc
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/minidump_file_writer.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/string_conversion.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/convert_UTF.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/language.cc
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/windows/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/windows/*.cc 
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/windows/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/windows/*.cc)
-ELSE (WIN32)
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/windows/handler/exception_handler.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/windows/crash_generation/crash_generation_client.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/windows/guid_string.cc
+    )
+ELSEIF (APPLE)
     FILE(GLOB_RECURSE DMBREAKPAD_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/src/*.cc 
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/src/*.cc 
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/mac/handler/exception_handler.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/mac/handler/minidump_generator.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/mac/handler/dynamic_images.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/mac/string_utilities.cc
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/minidump_file_writer.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/string_conversion.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/convert_UTF.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/language.cc
-  
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/linux/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/linux/*.cc 
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/linux/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/linux/*.cc)
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/mac/handler/breakpad_nlist_64.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/mac/file_id.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/mac/macho_id.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/mac/macho_walker.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/mac/macho_utilities.cc
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/minidump_file_writer.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/md5.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/string_conversion.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/convert_UTF.cc
+    )
+ELSEIF(UNIX)
+    ENABLE_LANGUAGE(ASM)
+    FILE(GLOB_RECURSE DMBREAKPAD_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/linux/crash_generation/crash_generation_client.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/linux/dump_writer_common/thread_info.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/linux/dump_writer_common/ucontext_reader.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/linux/handler/exception_handler.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/linux/handler/minidump_descriptor.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/linux/log/log.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/linux/microdump_writer/microdump_writer.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/linux/minidump_writer/linux_dumper.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/linux/minidump_writer/linux_ptrace_dumper.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/linux/minidump_writer/minidump_writer.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/client/minidump_file_writer.cc
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/linux/breakpad_getcontext.S
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/linux/elfutils.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/linux/file_id.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/linux/guid_creator.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/linux/linux_libc_support.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/linux/memory_mapped_file.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/linux/safe_readlink.cc
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/convert_UTF.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/md5.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/common/string_conversion.cc
+
+    )
 ENDIF()
 
 IF(WIN32)
@@ -83,7 +100,7 @@ ADD_EXECUTABLE(dmbreakpadtest ${CMAKE_CURRENT_SOURCE_DIR}/test/main.cc)
 TARGET_LINK_LIBRARIES(dmbreakpadtest dmbreakpad)
 
 IF (UNIX)
-    ADD_EXECUTABLE(minidump-2-core google_breakpad/tools/linux/md2core/minidump-2-core.cc)
+    ADD_EXECUTABLE(minidump-2-core ${CMAKE_CURRENT_SOURCE_DIR}/breakpad/src/tools/linux/md2core/minidump-2-core.cc)
 
     TARGET_LINK_LIBRARIES(minidump-2-core)
 
@@ -95,3 +112,5 @@ IF (UNIX)
     $<TARGET_FILE_DIR:minidump-2-core>
     )
 ENDIF(UNIX)
+
+
