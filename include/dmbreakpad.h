@@ -66,10 +66,10 @@ public:
     }
 #endif
 private:
-    google_breakpad::ExceptionHandler eh;
 #ifdef __linux__
     google_breakpad::MinidumpDescriptor descriptor;
 #endif
+    google_breakpad::ExceptionHandler eh;
 };
 
 #define DMBREAKPAD_INIT()               CDMBreakPad oInitBreakpad
