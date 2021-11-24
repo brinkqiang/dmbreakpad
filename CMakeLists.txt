@@ -41,6 +41,10 @@ IF (WIN32)
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/google_breakpad/*.cc
 
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/minidump_file_writer.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/string_conversion.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/convert_UTF.cc
+
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/windows/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/client/windows/*.cc 
     ${CMAKE_CURRENT_SOURCE_DIR}/google_breakpad/common/windows/*.cpp
