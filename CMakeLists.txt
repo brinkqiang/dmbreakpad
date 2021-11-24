@@ -101,7 +101,7 @@ TARGET_LINK_LIBRARIES(dmbreakpadtest dmbreakpad)
 IF (UNIX)
     ADD_EXECUTABLE(minidump-2-core ${CMAKE_CURRENT_SOURCE_DIR}/src/tools/linux/md2core/minidump-2-core.cc)
 
-    TARGET_LINK_LIBRARIES(minidump-2-core)
+    TARGET_LINK_LIBRARIES(minidump-2-core dmbreakpad)
 
     ADD_CUSTOM_COMMAND(
     TARGET minidump-2-core
