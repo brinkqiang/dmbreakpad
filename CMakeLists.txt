@@ -88,16 +88,16 @@ IF(WIN32)
     ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
 ENDIF(WIN32)
 
-ADD_LIBRARY(breakpad ${DMBREAKPAD_SOURCES})
+ADD_LIBRARY(dmbreakpad ${DMBREAKPAD_SOURCES})
 
 ADD_EXECUTABLE(dmbreakpadtest ${CMAKE_CURRENT_SOURCE_DIR}/test/main.cc)
 
-TARGET_LINK_LIBRARIES(dmbreakpadtest breakpad)
+TARGET_LINK_LIBRARIES(dmbreakpadtest dmbreakpad)
 
 IF (UNIX)
     ADD_EXECUTABLE(minidump-2-core ${CMAKE_CURRENT_SOURCE_DIR}/src/tools/linux/md2core/minidump-2-core.cc)
 
-    TARGET_LINK_LIBRARIES(minidump-2-core) breakpad
+    TARGET_LINK_LIBRARIES(minidump-2-core dmbreakpad)
 
     ADD_CUSTOM_COMMAND(
     TARGET minidump-2-core
