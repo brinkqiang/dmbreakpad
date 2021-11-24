@@ -16,7 +16,7 @@ class CDMBreakPad
 public:
     CDMBreakPad()
         :
-        eh(descriptor(std::string(".")), NULL, dumpCallback, NULL,  true, -1)
+        eh(descriptor(dir(".")), NULL, dumpCallback, NULL,  true, -1)
     {
 
     }
@@ -33,6 +33,7 @@ public:
 private:
     google_breakpad::ExceptionHandler eh;
     google_breakpad::MinidumpDescriptor descriptor;
+    std::string dir;
 };
 
 #define DMBREAKPAD_INIT()               CDMBreakPad oInitBreakpad
