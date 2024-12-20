@@ -35,7 +35,7 @@
 #define CLIENT_MINIDUMP_FILE_WRITER_H__
 
 #include <string>
-
+#include <stdint.h>
 #include "google_breakpad/common/minidump_format.h"
 
 namespace google_breakpad {
